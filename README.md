@@ -6,7 +6,8 @@ This is Todo-Application with Java Spring Boot.
 
 - [x] Mininum requirements
 - [x] App with Member
-- [ ] Change delete method as soft delete
+- [x] Slice Test Cases
+- [ ] API documentation
 - [ ] Spring Security
-- [ ] Slice Test Cases
+- [ ] Change delete method as soft delete
 - [ ] Notification via mail (Needs API)

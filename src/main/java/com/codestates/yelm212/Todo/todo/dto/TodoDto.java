@@ -5,7 +5,6 @@ import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 
 public class TodoDto {
@@ -40,7 +39,7 @@ private Boolean completed;
 
 //        @Pattern(regexp = "^(true|false)$", message = "완료 여부는 'true' 또는 'false' 여야 합니다.")
 @NotNull(message = "완료 여부는 'true' 또는 'false' 여야 합니다.")
-        private String completed;
+        private Boolean completed;
         public void setTodoId(long id) {
             this.id = id;
         }

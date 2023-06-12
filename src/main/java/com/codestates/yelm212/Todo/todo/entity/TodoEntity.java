@@ -26,6 +26,13 @@ public class TodoEntity {
 
     @Column(nullable = false)
     private Boolean completed;
+
+    public TodoEntity(String title, Long todoOrder, Boolean completed) {
+        this.title = title;
+        this.todoOrder = todoOrder;
+        this.completed = completed;
+    }
+
     @ManyToOne
     @JoinColumn(name = "memberId", insertable = false, updatable = false)
     private Member member;
