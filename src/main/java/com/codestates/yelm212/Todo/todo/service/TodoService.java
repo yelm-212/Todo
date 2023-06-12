@@ -57,6 +57,10 @@ public class TodoService {
         todoRepository.delete(todo);
     }
 
+    public void deleteTodo() {
+        todoRepository.deleteAll();
+    }
+
     @Transactional(readOnly = true)
     public TodoEntity findTodo(long id) {
 

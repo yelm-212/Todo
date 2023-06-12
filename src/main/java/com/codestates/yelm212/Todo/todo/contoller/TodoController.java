@@ -91,5 +91,11 @@ public class TodoController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @DeleteMapping("/")
+    public ResponseEntity deleteMember() {
+        todoService.deleteTodo();
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 
 }
