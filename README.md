@@ -10,4 +10,3 @@ This is Todo-Application with Java Spring Boot.
 - [ ] Spring Security
 - [ ] Slice Test Cases
 - [ ] Notification via mail (Needs API)
-- [ ] 
