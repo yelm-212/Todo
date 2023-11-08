@@ -1,14 +1,15 @@
 package com.codestates.yelm212.Todo.member.service;
 
+import com.codestates.yelm212.Todo.member.dto.MemberDto;
 import com.codestates.yelm212.Todo.member.entity.Member;
 import com.codestates.yelm212.Todo.member.repository.MemberRepository;
 import com.codestates.yelm212.Todo.todo.exception.ExceptionCode;
 import com.codestates.yelm212.Todo.todo.exception.LogicalException;
-import lombok.Setter;
-import org.apache.catalina.Store;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -18,14 +19,18 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Transactional
+@RequiredArgsConstructor
 public class MemberService {
-    private MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public Member createMember(Member member) {
-        verifyExistsEmail(member.getEmail());
-        Member savedMember = memberRepository.save(member);
-        return savedMember;
+    public Member createMember(MemberDto.Post requestBody) {
+        verifyExistsEmail(requestBody.getEmail());
+
+        return memberRepository.save(Member.builder()
+                        .email(requestBody.getEmail())
+                        .password(bCryptPasswordEncoder.encode(requestBody.getPassword()))
+                .build());
     }
 
     private void verifyExistsEmail(String email) {
@@ -56,7 +61,6 @@ public class MemberService {
 
     public void deleteMember(long memberId) {
         Member findMember = findVerifiedMember(memberId);
-
         memberRepository.delete(findMember);
     }
 

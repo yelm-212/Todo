@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: root
+    password: ${MYSQL_PASSWD}
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        ddl-auto: update
+        format_sql: true
+    defer-datasource-initialization: true
+    profiles:
+      include: create
+#  security:
+#    oauth2:
+#      client:
+#        registration:
+#          google:
+#            client-id: 663642..
+#            client-secret: GOCSP...
+#            scope:
+#              - email
+#              - profile
+jwt:
+  issuer: test@example.com
+  secret_key: study-springboot

@@ -2,6 +2,7 @@ package com.codestates.yelm212.Todo.todo.entity;
 
 
 import com.codestates.yelm212.Todo.member.entity.Member;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity(name = "TODOS")
+@Entity(name = "todos")
 public class TodoEntity {
 
     @Id // 기본키로 설정하기
@@ -27,6 +28,7 @@ public class TodoEntity {
     @Column(nullable = false)
     private Boolean completed;
 
+    @Builder
     public TodoEntity(String title, Long todoOrder, Boolean completed) {
         this.title = title;
         this.todoOrder = todoOrder;

@@ -19,7 +19,7 @@ import java.util.Optional;
 public class TodoService {
     private final TodoRepository todoRepository;
 
-    public TodoService(TodoRepository todoRepository, ApplicationEventPublisher publisher) {
+    public TodoService(TodoRepository todoRepository) {
         this.todoRepository = todoRepository;
     }
 
@@ -71,7 +71,7 @@ public class TodoService {
         return todo.isPresent();
     }
 
-    @Transactional(readOnly = true)
+//    @Transactional(readOnly = true)
     private TodoEntity findVerifiedTodo(long id) {
         Optional<TodoEntity> todoEntityOptional = todoRepository.findById(id);
         TodoEntity todo = todoEntityOptional.orElseThrow(() ->

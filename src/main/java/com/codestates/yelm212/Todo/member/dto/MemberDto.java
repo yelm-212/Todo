@@ -17,6 +17,9 @@ public class MemberDto {
 
         @NotBlank(message = "이름은 공백이 아니어야 합니다.")
         private String name;
+
+        @NotBlank(message = "비밀번호를 입력하세요.")
+        private String password;
     }
 
     @Getter
@@ -27,6 +30,7 @@ public class MemberDto {
         @NotBlank(message = "이름은 공백이 아니어야 합니다")
         private String name;
 
+        private String password;
         public void setMemberId(long memberId) {
             this.memberId = memberId;
         }

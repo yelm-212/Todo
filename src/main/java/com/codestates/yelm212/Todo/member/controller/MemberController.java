@@ -35,12 +35,11 @@ public class MemberController {
         this.mapper = mapper;
     }
 
-    @PostMapping
+    @PostMapping("/signup")
     public ResponseEntity postMember(MemberDto.Post requestBody) {
-        Member member = mapper.memberPostToMember(requestBody);
-        member.setTodos(new TodoEntity());
+//        Member member = mapper.memberPostToMember(requestBody);
 
-        Member createdMember = memberService.createMember(member);
+        Member createdMember = memberService.createMember(requestBody);
         URI location = UriCreator.createUri(MEMBER_DEF_URL, createdMember.getMemberId());
 
         return ResponseEntity.created(location).build();
