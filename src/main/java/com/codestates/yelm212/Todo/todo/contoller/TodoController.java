@@ -22,11 +22,11 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/")
+@RequestMapping("/todos")
 @Validated
 @Slf4j
 public class TodoController {
-    private final static String TODO_DEF_URL = "/";
+    private final static String TODO_DEF_URL = "/todos";
     private final TodoMapper todoMapper;
     private final TodoService todoService;
 

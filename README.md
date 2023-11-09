@@ -1,4 +1,5 @@
 # Todo-application
+
 This is Todo-Application with Java Spring Boot.
 
 ## Requirements
@@ -6,13 +7,20 @@ This is Todo-Application with Java Spring Boot.
 - [x] Mininum requirements
 - [x] App with Member
 - [x] Slice Test Cases
+- [ ] Thymeleaf Todo Page with one's own ID
 - [ ] Order by todoOrder, show non-completed todos (QueryDSL)
 
 ### Login (JWT, OAuth2)
 
 - [ ] JWT + Redis login & logout
+  - [ ] jwt login
+  - [ ] implement redis
 - [ ] OAuth2 login implementation(Google, Kakao, Naver, X)
-- [ ] Spring Security
+  - [ ] google
+  - [ ] kakao
+  - [ ] naver
+  - [ ] X
+- [x] Spring Security
 
 ### Refactor
 

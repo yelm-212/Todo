@@ -27,36 +27,13 @@ import java.util.List;
 @Validated
 @Slf4j
 public class MemberController {
-    private final static String MEMBER_DEF_URL = "/members";
+    protected final static String MEMBER_DEF_URL = "/members";
     private final MemberService memberService;
     private final MemberMapper mapper;
 
     public MemberController(MemberService memberService, MemberMapper mapper) {
         this.memberService = memberService;
         this.mapper = mapper;
-    }
-
-    @PostMapping("/signup")
-    public ResponseEntity postMember(MemberDto.SignUp requestBody) {
-        Member createdMember = memberService.createMember(requestBody);
-
-        URI location = UriCreator.createUri(MEMBER_DEF_URL, createdMember.getMemberId());
-        return ResponseEntity.created(location).build();
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity loginMember(MemberDto.Login requestBody) {
-//        Member createdMember = memberService.createMember(requestBody);
-
-//        URI location = UriCreator.createUri(MEMBER_DEF_URL, createdMember.getMemberId());
-        // Todo: Login Implementation
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/logout")
-    public ResponseEntity logoutMember(HttpServletRequest request, HttpServletResponse response) {
-       // Todo: Logout Implementation
-        return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/{member-id}")

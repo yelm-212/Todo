@@ -29,6 +29,7 @@ public class MemberService {
 
         return memberRepository.save(
                 Member.builder()
+                        .name(requestBody.getName())
                         .email(requestBody.getEmail())
                         .password(bCryptPasswordEncoder.encode(requestBody.getPassword()))
                 .build());
