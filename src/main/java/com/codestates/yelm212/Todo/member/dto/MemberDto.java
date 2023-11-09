@@ -10,7 +10,7 @@ public class MemberDto {
 
     @Getter
     @AllArgsConstructor
-    public class Post {
+    public class SignUp {
         @NotBlank
         @Email
         private String email;
@@ -42,5 +42,16 @@ public class MemberDto {
         private long memberId;
         private String email;
         private String name;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public class Login {
+        @NotBlank
+        @Email
+        private String email;
+
+        @NotBlank(message = "비밀번호를 입력하세요.")
+        private String password;
     }
 }

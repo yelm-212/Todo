@@ -2,6 +2,7 @@ create table members(
                         member_id bigint not null,
                         name varchar(100) not null,
                         email varchar(256) not null,
+                        password varchar(256) not null,
                         primary key(member_id)
 );
 

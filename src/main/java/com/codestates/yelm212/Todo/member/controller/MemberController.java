@@ -7,7 +7,6 @@ import com.codestates.yelm212.Todo.member.dto.MemberDto;
 import com.codestates.yelm212.Todo.member.entity.Member;
 import com.codestates.yelm212.Todo.member.mapper.MemberMapper;
 import com.codestates.yelm212.Todo.member.service.MemberService;
-import com.codestates.yelm212.Todo.todo.entity.TodoEntity;
 import com.codestates.yelm212.Todo.utils.UriCreator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -16,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
@@ -35,29 +36,27 @@ public class MemberController {
         this.mapper = mapper;
     }
 
-    // Todo: login method implementation
-    @PostMapping("/login")
-    public ResponseEntity loginMember(){
-//        return new ResponseEntity<>()
-        return null;
-    }
-
-    // Todo: logout method implementation
-    @PostMapping("/logout")
-    public ResponseEntity logoutMember(){
-
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
     @PostMapping("/signup")
-    public ResponseEntity postMember(MemberDto.Post requestBody) {
-//        Member member = mapper.memberPostToMember(requestBody);
-
+    public ResponseEntity postMember(MemberDto.SignUp requestBody) {
         Member createdMember = memberService.createMember(requestBody);
-        URI location = UriCreator.createUri(MEMBER_DEF_URL, createdMember.getMemberId());
 
+        URI location = UriCreator.createUri(MEMBER_DEF_URL, createdMember.getMemberId());
         return ResponseEntity.created(location).build();
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity loginMember(MemberDto.Login requestBody) {
+//        Member createdMember = memberService.createMember(requestBody);
+
+//        URI location = UriCreator.createUri(MEMBER_DEF_URL, createdMember.getMemberId());
+        // Todo: Login Implementation
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity logoutMember(HttpServletRequest request, HttpServletResponse response) {
+       // Todo: Logout Implementation
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/{member-id}")
@@ -107,6 +106,7 @@ public class MemberController {
     public ResponseEntity deleteMember(
             @PathVariable("member-id") @Positive long memberId) {
         memberService.deleteMember(memberId);
+
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

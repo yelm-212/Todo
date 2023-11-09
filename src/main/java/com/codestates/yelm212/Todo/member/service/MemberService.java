@@ -24,10 +24,11 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public Member createMember(MemberDto.Post requestBody) {
+    public Member createMember(MemberDto.SignUp requestBody) {
         verifyExistsEmail(requestBody.getEmail());
 
-        return memberRepository.save(Member.builder()
+        return memberRepository.save(
+                Member.builder()
                         .email(requestBody.getEmail())
                         .password(bCryptPasswordEncoder.encode(requestBody.getPassword()))
                 .build());

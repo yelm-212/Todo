@@ -36,12 +36,12 @@ public class Member implements UserDetails {
     @OneToMany(mappedBy = "member")
     private List<TodoEntity> todos = new ArrayList<>();
 
+    // Todo : needs to be deprecated. Use Builder pattern
     public void setTodos(TodoEntity todo) {
         todos.add(todo);
         if(todo.getMember() != this) todo.setMember(this);
     }
 
-    // Todo : needs to be deprecated. Use Builder pattern
     @Builder
     public Member(Long memberId, String name, String email, String password) {
         this.memberId = memberId;

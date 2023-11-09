@@ -11,46 +11,51 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
 @RequiredArgsConstructor
 @Configuration
 public class WebSecurityConfig {
-    private final UserDetailService userDetailService;
-
-
-//    @Bean
-//    public WebSecurityCustomizer configure() {
-//        return (web) -> web.ignoring()
-////                .requestMatchers(toH2Console())
-//                .requestMatchers("/static/**");
-//    }
+    private final UserDetailService userService;
+    @Bean
+    public WebSecurityCustomizer configure() {
+        return (web) -> web.ignoring()
+                .requestMatchers(toH2Console())
+                .antMatchers("/static/**", "/");
+    }
 
     // Todo: Edit requestMatcher, login pages ... as required on APIs
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                .authorizeRequests()
-//                .requestMatchers("/login", "/signup", "/user").permitAll()
+                .authorizeHttpRequests()
+                .antMatchers("/login", "/signup", "/member").permitAll()
                 .anyRequest().authenticated()
+
                 .and()
                 .formLogin()
                 .loginPage("/login")
-                .defaultSuccessUrl("/articles")
+                .defaultSuccessUrl("/")
+
                 .and()
                 .logout()
                 .logoutSuccessUrl("/login")
                 .invalidateHttpSession(true)
+
                 .and()
                 .csrf().disable()
                 .build();
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder, UserDetailService userDetailService) throws Exception {
+    public AuthenticationManager authenticationManager(
+            HttpSecurity http,
+            BCryptPasswordEncoder bCryptPasswordEncoder,
+            UserDetailService userDetailService) throws Exception {
         return http.getSharedObject(AuthenticationManagerBuilder.class)
-                .userDetailsService(userDetailService)
+                .userDetailsService(userService)
                 .passwordEncoder(bCryptPasswordEncoder)
                 .and()
                 .build();
