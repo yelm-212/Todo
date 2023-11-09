@@ -35,6 +35,21 @@ public class MemberController {
         this.mapper = mapper;
     }
 
+    // Todo: login method implementation
+    @PostMapping("/login")
+    public ResponseEntity loginMember(){
+//        return new ResponseEntity<>()
+        return null;
+    }
+
+    // Todo: logout method implementation
+    @PostMapping("/logout")
+    public ResponseEntity logoutMember(){
+
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @PostMapping("/signup")
     public ResponseEntity postMember(MemberDto.Post requestBody) {
 //        Member member = mapper.memberPostToMember(requestBody);
@@ -92,7 +107,6 @@ public class MemberController {
     public ResponseEntity deleteMember(
             @PathVariable("member-id") @Positive long memberId) {
         memberService.deleteMember(memberId);
-
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
