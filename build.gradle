@@ -47,6 +47,12 @@ dependencies {
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.1.Final'
 
 	implementation 'com.google.code.gson:gson'
+
+	implementation 'org.webjars:jquery:3.5.1'
+	implementation 'org.webjars:bootstrap:4.5.3'
+	implementation 'org.webjars:webjars-locator:0.41'
+	implementation 'org.webjars.npm:todomvc-common:1.0.5'
+	implementation 'org.webjars.npm:todomvc-app-css:2.4.1'
 }
 
 tasks.named('test') {

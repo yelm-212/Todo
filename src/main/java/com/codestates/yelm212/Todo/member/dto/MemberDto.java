@@ -43,15 +43,4 @@ public class MemberDto {
         private String email;
         private String name;
     }
-
-    @Getter
-    @AllArgsConstructor
-    public class Login {
-        @NotBlank
-        @Email
-        private String email;
-
-        @NotBlank(message = "비밀번호를 입력하세요.")
-        private String password;
-    }
 }

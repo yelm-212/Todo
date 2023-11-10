@@ -1,9 +1,16 @@
 package com.codestates.yelm212.Todo.member.controller;
 
+import com.codestates.yelm212.Todo.config.token.TokenDto;
+import com.codestates.yelm212.Todo.config.token.TokenService;
+import com.codestates.yelm212.Todo.dto.SingleResponseDto;
+import com.codestates.yelm212.Todo.member.dto.LoginDto;
 import com.codestates.yelm212.Todo.member.dto.MemberDto;
 import com.codestates.yelm212.Todo.member.entity.Member;
 import com.codestates.yelm212.Todo.member.service.MemberService;
+import com.codestates.yelm212.Todo.member.service.UserDetailService;
 import com.codestates.yelm212.Todo.utils.UriCreator;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import java.net.URI;
 
 import static com.codestates.yelm212.Todo.member.controller.MemberController.MEMBER_DEF_URL;
@@ -19,9 +27,13 @@ import static com.codestates.yelm212.Todo.member.controller.MemberController.MEM
 public class ViewController {
 
     private final MemberService memberService;
+    private final UserDetailService userDetailService;
+    private final TokenService tokenService;
 
-    public ViewController(MemberService memberService) {
+    public ViewController(MemberService memberService, UserDetailService userDetailService, TokenService tokenService) {
         this.memberService = memberService;
+        this.userDetailService = userDetailService;
+        this.tokenService = tokenService;
     }
 
     @GetMapping("/login")
@@ -41,13 +53,19 @@ public class ViewController {
         return ResponseEntity.created(location).build();
     }
 
-    @PostMapping("/login")
-    public ResponseEntity loginMember(MemberDto.Login requestBody) {
-//        Member createdMember = memberService.createMember(requestBody);
+    @Transactional
+    @PostMapping("/api/login")
+    public ResponseEntity loginMember(LoginDto.Login requestBody) {
 
-//        URI location = UriCreator.createUri(MEMBER_DEF_URL, createdMember.getMemberId());
-        // Todo: Login Implementation
-        return ResponseEntity.ok().build();
+        Member loadedMember = userDetailService.loadUserByUsername(requestBody.getEmail());
+        String token = tokenService.createAccessTokenByMember(loadedMember);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Refresh", token);
+//        headers.add();
+
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(
+                        loadedMember.getName()), headers, HttpStatus.ACCEPTED);
     }
 
     @GetMapping("/logout")

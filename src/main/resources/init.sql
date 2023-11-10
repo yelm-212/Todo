@@ -15,3 +15,11 @@ create table todos(
                       primary key(id),
                       foreign key(member_id) references members(member_id)
 );
+
+create table refreshtoken(
+                      id bigint not null,
+                      member_id bigint,
+                      refresh_token varchar(512) not null,
+                      primary key(id),
+                      foreign key(member_id) references members(member_id)
+);
