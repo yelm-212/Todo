@@ -61,11 +61,13 @@ public class ViewController {
         String token = tokenService.createAccessTokenByMember(loadedMember);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Refresh", token);
-//        headers.add();
 
-        return new ResponseEntity<>(
-                new SingleResponseDto<>(
-                        loadedMember.getName()), headers, HttpStatus.ACCEPTED);
+//        return new ResponseEntity<>(
+//                new SingleResponseDto<>(
+//                        loadedMember.getName()), headers, HttpStatus.ACCEPTED);
+        return  ResponseEntity.accepted()
+                .headers(headers)
+                .body(new SingleResponseDto<>(loadedMember.getName()));
     }
 
     @GetMapping("/logout")
