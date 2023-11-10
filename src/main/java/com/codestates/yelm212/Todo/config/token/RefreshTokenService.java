@@ -35,4 +35,9 @@ public class RefreshTokenService {
 
         refreshTokenRepository.save(refreshToken);
     }
+
+    // TODO : check this works on redis. (
+    public void deleteRefreshToken(RefreshToken refreshToken) {
+        refreshTokenRepository.delete(refreshToken);
+    }
 }

@@ -3,20 +3,22 @@ package com.codestates.yelm212.Todo.config.token;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.redis.core.RedisHash;
 
 import javax.persistence.*;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Entity(name = "refreshtoken")
+//@Entity(name = "refreshtoken")
+@RedisHash(value = "people", timeToLive = 30)
 public class RefreshToken {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = false)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(name = "id", updatable = false)
     private Long id;
 
-    @Column(name = "member_id", nullable = false, unique = true)
+//    @Column(name = "member_id", nullable = false, unique = true)
     private Long memberId;
 
     @Column(name = "refresh_token", nullable = false)

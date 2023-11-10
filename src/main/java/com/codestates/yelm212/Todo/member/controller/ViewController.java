@@ -12,6 +12,8 @@ import com.codestates.yelm212.Todo.utils.UriCreator;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -62,9 +64,6 @@ public class ViewController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Refresh", token);
 
-//        return new ResponseEntity<>(
-//                new SingleResponseDto<>(
-//                        loadedMember.getName()), headers, HttpStatus.ACCEPTED);
         return  ResponseEntity.accepted()
                 .headers(headers)
                 .body(new SingleResponseDto<>(loadedMember.getName()));
@@ -73,6 +72,7 @@ public class ViewController {
     @GetMapping("/logout")
     public ResponseEntity logoutMember(HttpServletRequest request, HttpServletResponse response) {
         // Todo: Logout Implementation
+        new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
         return ResponseEntity.ok().build();
     }
 
