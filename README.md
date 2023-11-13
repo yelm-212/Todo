@@ -12,9 +12,9 @@ This is Todo-Application with Java Spring Boot.
 
 ### Login (JWT, OAuth2)
 
-- [ ] JWT + Redis login & logout
-  - [ ] jwt login : Authorization Code Grant
-  - [ ] implement redis
+- [x] JWT + Redis login & logout
+  - [x] jwt login : Authorization Code Grant
+  - [x] implement redis
 - [ ] OAuth2 login implementation(Google, Kakao, Naver, X)
   - [ ] google
   - [ ] kakao
