@@ -2,10 +2,7 @@ package com.codestates.yelm212.Todo.member.entity;
 
 
 import com.codestates.yelm212.Todo.todo.entity.TodoEntity;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +15,8 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity(name = "members")
 public class Member implements UserDetails {
     @Id

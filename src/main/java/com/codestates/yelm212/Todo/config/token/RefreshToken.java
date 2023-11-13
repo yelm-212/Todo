@@ -1,16 +1,17 @@
 package com.codestates.yelm212.Todo.config.token;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.index.Indexed;
 
 import javax.persistence.*;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 //@Entity(name = "refreshtoken")
-@RedisHash(value = "people", timeToLive = 30)
+@RedisHash(value = "refreshToken", timeToLive = 720)
 public class RefreshToken {
 
     @Id
@@ -21,7 +22,8 @@ public class RefreshToken {
 //    @Column(name = "member_id", nullable = false, unique = true)
     private Long memberId;
 
-    @Column(name = "refresh_token", nullable = false)
+//    @Column(name = "refresh_token", nullable = false)
+    @Indexed
     private String refreshToken;
 
     public RefreshToken(Long memberId, String refreshToken) {
@@ -31,7 +33,6 @@ public class RefreshToken {
 
     public RefreshToken update(String newRefreshToken) {
         this.refreshToken = newRefreshToken;
-
         return this;
     }
 }

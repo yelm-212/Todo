@@ -3,6 +3,7 @@ package com.codestates.yelm212.Todo.member.dto;
 
 import com.nimbusds.oauth2.sdk.Role;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,7 +15,7 @@ import javax.validation.constraints.NotBlank;
 public class LoginDto {
     @Getter
     @AllArgsConstructor
-    public class Login {
+    public static class Login {
         @NotBlank
         @Email
         private String email;

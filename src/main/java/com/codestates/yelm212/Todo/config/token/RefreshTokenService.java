@@ -25,19 +25,20 @@ public class RefreshTokenService {
     @Transactional
     public RefreshToken addRefreshToken(Long memberId, String refreshToken) {
         RefreshToken token = new RefreshToken(memberId, refreshToken);
-        return refreshTokenRepository.save(token);
+        return refreshTokenRepository.save(
+                RefreshToken.builder()
+                .id(memberId)
+                .refreshToken(refreshToken)
+                .build());
     }
 
     public void updateRefreshToken(RefreshToken refreshToken) {
-//        RefreshToken token = findByMember(member)
-//                .orElseThrow(() ->
-//                        new IllegalArgumentException("This member doesn't have own token."));
-
         refreshTokenRepository.save(refreshToken);
     }
 
-    // TODO : check this works on redis. (
+    // TODO : check if this works on redis. (
     public void deleteRefreshToken(RefreshToken refreshToken) {
         refreshTokenRepository.delete(refreshToken);
+        refreshTokenRepository.deleteById(refreshToken.getId());
     }
 }

@@ -10,7 +10,7 @@ public class MemberDto {
 
     @Getter
     @AllArgsConstructor
-    public class SignUp {
+    public static class SignUp {
         @NotBlank
         @Email
         private String email;
@@ -24,7 +24,7 @@ public class MemberDto {
 
     @Getter
     @AllArgsConstructor
-    public class Patch {
+    public static class Patch {
         private long memberId;
 
         @NotBlank(message = "이름은 공백이 아니어야 합니다")

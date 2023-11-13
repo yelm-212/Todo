@@ -40,7 +40,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests()
-                .antMatchers("/favicon.ico","/login", "/signup", "/api/login").permitAll()
+                .antMatchers("/favicon.ico","/login", "/signup", "/api/**").permitAll()
                 .anyRequest().authenticated()
 
                 .and()
