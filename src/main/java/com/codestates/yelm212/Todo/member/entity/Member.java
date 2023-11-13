@@ -1,26 +1,26 @@
 package com.codestates.yelm212.Todo.member.entity;
 
 
+import com.codestates.yelm212.Todo.config.oauth2.oauth2user.OAuth2UserInfo;
 import com.codestates.yelm212.Todo.todo.entity.TodoEntity;
+import com.codestates.yelm212.Todo.config.oauth2.AuthProvider;
+
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity(name = "members")
-public class Member implements UserDetails {
+public class Member implements UserDetails{
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // post할때 별도 세팅 안해도 알아서 해줌 (식별자)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
 
     @Column(length = 100, nullable = false)
@@ -32,8 +32,14 @@ public class Member implements UserDetails {
     @Column(nullable = false, updatable = true)
     private String password;
 
+    @Column(length = 100, nullable = true)
+    private String oauth2Id;
+
     @OneToMany(mappedBy = "member")
     private List<TodoEntity> todos = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    private AuthProvider authProvider;
 
     // Todo : needs to be deprecated. Use Builder pattern
     public void setTodos(TodoEntity todo) {
@@ -82,5 +88,12 @@ public class Member implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public Member update(OAuth2UserInfo oAuth2UserInfo) {
+        this.name = oAuth2UserInfo.getName();
+        this.oauth2Id = oAuth2UserInfo.getOAuth2Id();
+        this.email = oAuth2UserInfo.getEmail();
+        return this;
     }
 }

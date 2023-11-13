@@ -68,7 +68,6 @@ public class ViewController {
 
     @PostMapping ("/api/logout")
     public ResponseEntity logoutMember(@RequestHeader("RefreshToken") String refreshToken) {
-        // Todo: Logout Implementation
         tokenService.deleteRefreshTokenByRefreshToken(refreshToken);
         return ResponseEntity.ok().build();
     }

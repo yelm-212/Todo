@@ -1,5 +1,6 @@
 package com.codestates.yelm212.Todo.config.token;
 
+import com.codestates.yelm212.Todo.config.jwt.ExpireTime;
 import com.codestates.yelm212.Todo.config.jwt.TokenProvider;
 import com.codestates.yelm212.Todo.member.entity.Member;
 import com.codestates.yelm212.Todo.member.service.MemberService;
@@ -61,7 +62,7 @@ public class TokenService {
     }
 
     private String getGeneratedToken(Member member) {
-        return tokenProvider.generateToken(member, Duration.ofHours(2));
+        return tokenProvider.generateToken(member, ExpireTime.REFRESH_TOKEN_EXPIRE_TIME);
     }
 
     public void deleteRefreshTokenByRefreshToken(String refreshToken){

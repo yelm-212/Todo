@@ -1,6 +1,9 @@
 package com.codestates.yelm212.Todo.config;
 
-import com.codestates.yelm212.Todo.member.service.MemberService;
+import com.codestates.yelm212.Todo.config.cookies.CookieAuthorizationRequestRepository;
+import com.codestates.yelm212.Todo.config.oauth2.oauth2user.CustomOAuth2UserService;
+import com.codestates.yelm212.Todo.config.oauth2.OAuth2AuthenticationFailureHandler;
+import com.codestates.yelm212.Todo.config.oauth2.OAuth2AuthenticationSuccessHandler;
 import com.codestates.yelm212.Todo.member.service.UserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -15,7 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +31,10 @@ import java.io.IOException;
 @Configuration
 public class WebSecurityConfig {
     private final UserDetailService userService;
+    private final CookieAuthorizationRequestRepository cookieAuthorizationRequestRepository;
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
+    private final CustomOAuth2UserService customOAuth2UserService;
     @Bean
     public WebSecurityCustomizer configure() {
         return (web) -> web.ignoring()
@@ -38,7 +45,7 @@ public class WebSecurityConfig {
     // Todo: Edit requestMatcher, login pages ... as required on APIs
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http
+        http
                 .authorizeHttpRequests()
                 .antMatchers("/favicon.ico","/login", "/signup", "/api/**").permitAll()
                 .anyRequest().authenticated()
@@ -74,15 +81,38 @@ public class WebSecurityConfig {
                 })
                 .permitAll()
 
-                .and()
-                .logout()
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/login")
-                .invalidateHttpSession(true)
+//                .and()
+//                .logout()
+//                .logoutUrl("/logout")
+//                .logoutSuccessUrl("/login")
+//                .invalidateHttpSession(true)
 
                 .and()
-                .csrf().disable()
-                .build();
+                .csrf().disable();
+
+        http.oauth2Login()
+                .authorizationEndpoint()
+                .baseUri("/oauth2/authorize")  // OAuth login url
+                .authorizationRequestRepository(cookieAuthorizationRequestRepository)  // save requests as cookie
+                .and()
+                .redirectionEndpoint()
+                .baseUri("/oauth2/callback/*")  // redirect url
+                .and()
+
+                //userService()는 OAuth2 인증 과정에서 Authentication 생성에 필요한 OAuth2User 를 반환하는 클래스를 지정한다.
+                .userInfoEndpoint().userService(customOAuth2UserService)  // saves member infos.
+                .and()
+                .successHandler(oAuth2AuthenticationSuccessHandler)
+                .failureHandler(oAuth2AuthenticationFailureHandler);
+
+        http.logout()
+                .clearAuthentication(true)
+                .deleteCookies("JSESSIONID");
+
+        //jwt filter 설정
+//        http.addFilterBefore(new JwtAuthenticationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
     }
 
     @Bean

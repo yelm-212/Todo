@@ -1,5 +1,6 @@
 package com.codestates.yelm212.Todo.config.jwt;
 
+import com.codestates.yelm212.Todo.config.token.TokenDto;
 import com.codestates.yelm212.Todo.member.entity.Member;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
@@ -8,23 +9,65 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
+import java.security.Key;
 import java.time.Duration;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class TokenProvider {
-
     private final JwtProperties jwtProperties;
+
+    private static final String AUTHORIZATION_HEADER = "Authorization";
+    private static final String AUTHORITIES_KEY = "auth";
+    private static final String BEARER_TYPE = "Bearer";
+    private static final String TYPE_ACCESS = "access";
+    private static final String TYPE_REFRESH = "refresh";
+
+    private final Key key;
 
     public String generateToken(Member member, Duration expiredAt) {
         Date now = new Date();
         return makeToken(new Date(now.getTime() + expiredAt.toMillis()), member);
+    }
+
+    public TokenDto generateToken(Authentication authentication) {
+//        authentication
+        return generateToken(authentication.getName(), authentication.getAuthorities());
+    }
+
+    // TODO: implement this method
+    public TokenDto generateToken(String name, Collection<? extends GrantedAuthority> inputAuthorities) {
+        //권한 가져오기
+        String authorities = inputAuthorities.stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
+        Date now = new Date();
+
+        //Generate AccessToken
+        String accessToken = Jwts.builder()
+                .setSubject(name)
+                .claim(AUTHORITIES_KEY, authorities)
+                .claim("type", TYPE_ACCESS)
+                .setIssuedAt(now)   //토큰 발행 시간 정보
+                .setExpiration(new Date(now.getTime() + ExpireTime.ACCESS_TOKEN_EXPIRE_TIME.toMillis()))  //토큰 만료 시간 설정
+                .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
+                .compact();
+
+        //Generate RefreshToken
+//        String refreshToken = generateToken(
+//                Member.builder().name(name).email().memberId().build(), ExpireTime.REFRESH_TOKEN_EXPIRE_TIME);
+
+        return null;
     }
 
     private String makeToken(Date expiry, Member member) {
