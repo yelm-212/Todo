@@ -57,7 +57,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
 
         //JWT 생성
-        TokenDto token = tokenProvider.generateToken(authentication);
+        TokenDto token = tokenProvider.generateTokenByAuth(authentication);
 
         return UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("token", token.getRefreshToken())

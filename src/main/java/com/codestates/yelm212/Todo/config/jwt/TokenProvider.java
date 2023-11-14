@@ -2,6 +2,7 @@ package com.codestates.yelm212.Todo.config.jwt;
 
 import com.codestates.yelm212.Todo.config.token.TokenDto;
 import com.codestates.yelm212.Todo.member.entity.Member;
+import com.codestates.yelm212.Todo.member.repository.MemberRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
@@ -32,19 +33,15 @@ public class TokenProvider {
     private static final String TYPE_ACCESS = "access";
     private static final String TYPE_REFRESH = "refresh";
 
-    private final Key key;
-
     public String generateToken(Member member, Duration expiredAt) {
         Date now = new Date();
         return makeToken(new Date(now.getTime() + expiredAt.toMillis()), member);
     }
 
-    public TokenDto generateToken(Authentication authentication) {
-//        authentication
+    public TokenDto generateTokenByAuth(Authentication authentication) {
         return generateToken(authentication.getName(), authentication.getAuthorities());
     }
 
-    // TODO: implement this method
     public TokenDto generateToken(String name, Collection<? extends GrantedAuthority> inputAuthorities) {
         //권한 가져오기
         String authorities = inputAuthorities.stream()
@@ -54,7 +51,22 @@ public class TokenProvider {
         Date now = new Date();
 
         //Generate AccessToken
-        String accessToken = Jwts.builder()
+        String accessToken = makeAccessToken(name, authorities, now);
+
+        //Generate RefreshToken
+        String refreshToken = makeToken(name, authorities, now);
+
+        return TokenDto.builder()
+                .grantType(BEARER_TYPE)
+                .accessToken(accessToken)
+                .accessTokenExpirationTime(ExpireTime.ACCESS_TOKEN_EXPIRE_TIME.toMillis())
+                .refreshToken(refreshToken)
+                .refreshTokenExpirationTime(ExpireTime.REFRESH_TOKEN_EXPIRE_TIME.toMillis())
+                .build();
+    }
+
+    private String makeAccessToken(String name, String authorities, Date now) {
+        return Jwts.builder()
                 .setSubject(name)
                 .claim(AUTHORITIES_KEY, authorities)
                 .claim("type", TYPE_ACCESS)
@@ -62,12 +74,17 @@ public class TokenProvider {
                 .setExpiration(new Date(now.getTime() + ExpireTime.ACCESS_TOKEN_EXPIRE_TIME.toMillis()))  //토큰 만료 시간 설정
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
                 .compact();
+    }
 
-        //Generate RefreshToken
-//        String refreshToken = generateToken(
-//                Member.builder().name(name).email().memberId().build(), ExpireTime.REFRESH_TOKEN_EXPIRE_TIME);
-
-        return null;
+    private String makeToken(String name, String authorities, Date now) {
+        return Jwts.builder()
+                .setSubject(name)
+                .claim(AUTHORITIES_KEY, authorities)
+                .claim("type", TYPE_REFRESH)
+                .setIssuedAt(now)   //토큰 발행 시간 정보
+                .setExpiration(new Date(now.getTime() + ExpireTime.ACCESS_TOKEN_EXPIRE_TIME.toMillis()))  //토큰 만료 시간 설정
+                .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
+                .compact();
     }
 
     private String makeToken(Date expiry, Member member) {
