@@ -2,7 +2,6 @@ package com.codestates.yelm212.Todo.config.jwt;
 
 import com.codestates.yelm212.Todo.config.token.TokenDto;
 import com.codestates.yelm212.Todo.member.entity.Member;
-import com.codestates.yelm212.Todo.member.repository.MemberRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
@@ -14,7 +13,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
-import java.security.Key;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.Collections;
