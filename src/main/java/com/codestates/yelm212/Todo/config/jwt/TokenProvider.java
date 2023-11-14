@@ -36,6 +36,10 @@ public class TokenProvider {
         return makeToken(new Date(now.getTime() + expiredAt.toMillis()), member);
     }
 
+    public String generateAccessToken(Member member){
+        return makeAccessToken(member);
+    }
+
     public TokenDto generateTokenByAuth(Authentication authentication) {
         return generateToken(authentication.getName(), authentication.getAuthorities());
     }
@@ -67,6 +71,18 @@ public class TokenProvider {
         return Jwts.builder()
                 .setSubject(name)
                 .claim(AUTHORITIES_KEY, authorities)
+                .claim("type", TYPE_ACCESS)
+                .setIssuedAt(now)   //토큰 발행 시간 정보
+                .setExpiration(new Date(now.getTime() + ExpireTime.ACCESS_TOKEN_EXPIRE_TIME.toMillis()))  //토큰 만료 시간 설정
+                .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
+                .compact();
+    }
+
+    private String makeAccessToken(Member member) {
+        Date now = new Date();
+        return Jwts.builder()
+                .setSubject(member.getName())
+                .claim(AUTHORITIES_KEY, member.getAuthorities())
                 .claim("type", TYPE_ACCESS)
                 .setIssuedAt(now)   //토큰 발행 시간 정보
                 .setExpiration(new Date(now.getTime() + ExpireTime.ACCESS_TOKEN_EXPIRE_TIME.toMillis()))  //토큰 만료 시간 설정

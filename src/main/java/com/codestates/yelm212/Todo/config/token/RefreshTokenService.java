@@ -24,7 +24,7 @@ public class RefreshTokenService {
 
     @Transactional
     public RefreshToken addRefreshToken(Long memberId, String refreshToken) {
-        RefreshToken token = new RefreshToken(memberId, refreshToken);
+//        RefreshToken token = new RefreshToken(memberId, refreshToken);
         return refreshTokenRepository.save(
                 RefreshToken.builder()
                 .id(memberId)

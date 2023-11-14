@@ -18,7 +18,6 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
     private final MemberRepository memberRepository;
@@ -43,11 +42,14 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         }
 
         Optional<Member> optionalMember = memberRepository.findByEmail(oAuth2UserInfo.getEmail());
-        //이미 가입된 경우
+
+        // 이미 가입된 경우
+        // 해당 메일로 가입한 유저가 이미 존재함
         if (!optionalMember.get().getAuthProvider().equals(authProvider)) {
             throw new RuntimeException("Email already signed up.");
         }
 
+        //  OAuth2에서 가져온 정보를 가지고 기존 유저 정보 업데이트
         if (optionalMember.isPresent()) {
             Member member = updateUser(optionalMember.get(), oAuth2UserInfo);
             return UserPrincipal.create(member, oAuth2UserInfo.getAttributes());
@@ -65,9 +67,9 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 .oauth2Id(oAuth2UserInfo.getOAuth2Id())
                 .authProvider(authProvider)
                 .build();
-
         return memberRepository.save(member);
     }
+
 
     private Member updateUser(Member member, OAuth2UserInfo oAuth2UserInfo) {
         return memberRepository.save(member.update(oAuth2UserInfo));

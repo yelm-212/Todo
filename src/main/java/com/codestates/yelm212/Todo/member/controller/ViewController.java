@@ -38,6 +38,11 @@ public class ViewController {
         return "login";
     }
 
+    @GetMapping("/oauth2/login")
+    public String oauth2Login() {
+        return "oauthLogin";
+    }
+
     @GetMapping("/signup")
     public String signup() {
         return "signup";
@@ -56,10 +61,10 @@ public class ViewController {
 
         Member loadedMember = userDetailService.loadUserByUsername(requestBody.getEmail());
         String token = tokenService.createRefreshTokenByMember(loadedMember);
-//        String accessToken = tokenService.createAccessToken();
+        String accessToken = tokenService.createAccessToken(loadedMember);
         HttpHeaders headers = new HttpHeaders();
         headers.add("RefreshToken", token);
-//        headers.add("Authorization", );
+        headers.add("Authorization", accessToken);
 
         return  ResponseEntity.accepted()
                 .headers(headers)

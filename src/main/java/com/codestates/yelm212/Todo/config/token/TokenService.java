@@ -69,5 +69,10 @@ public class TokenService {
         RefreshToken findRefreshToken = refreshTokenService.findByRefreshToken(refreshToken);
         refreshTokenService.deleteRefreshToken(findRefreshToken);
     }
+
+    // Todo : Implement this method
+    public String createAccessToken(Member member) {
+        return tokenProvider.generateAccessToken(member);
+    }
 }
 

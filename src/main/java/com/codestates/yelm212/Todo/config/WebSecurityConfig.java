@@ -99,7 +99,7 @@ public class WebSecurityConfig {
                 .baseUri("/oauth2/callback/*")  // redirect url
                 .and()
 
-                //userService()는 OAuth2 인증 과정에서 Authentication 생성에 필요한 OAuth2User 를 반환하는 클래스를 지정한다.
+                //userService()는 OAuth2 인증 과정에서 Authentication 생성에 필요한 OAuth2User를 반환하는 클래스를 지정한다.
                 .userInfoEndpoint().userService(customOAuth2UserService)  // saves member infos.
                 .and()
                 .successHandler(oAuth2AuthenticationSuccessHandler)
