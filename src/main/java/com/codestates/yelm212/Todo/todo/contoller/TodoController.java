@@ -85,14 +85,14 @@ public class TodoController {
     }
 
     @DeleteMapping("/{todo-id}")
-    public ResponseEntity deleteMember(
+    public ResponseEntity deleteTodo(
             @PathVariable("todo-id") @Positive long Id) {
         todoService.deleteTodo(Id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/")
-    public ResponseEntity deleteMember() {
+    public ResponseEntity deleteTodo() {
         todoService.deleteTodo();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
