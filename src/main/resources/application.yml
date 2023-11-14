@@ -26,23 +26,23 @@ spring:
               - email
               - profile
             redirect-uri: http://localhost:8080/oauth2/callback/google
-
           # TODO : Naver, Kakao settings
           naver:
-            client-id:
-            client-secret:
+            client-id: ${NAVER_CLI}
+            client-secret: ${NAVER_KEY}
             client-name: Naver
             authorization-grant-type: authorization_code
             redirect-uri: http://localhost:8080/oauth2/callback/naver
           kakao:
-            client-id:
+            client-id: ${KAKAO_CLI}
+            client-secret: ${KAKAO_SECRET}
             redirect-uri: http://localhost:8080/oauth2/callback/kakao
             authorization-grant-type: authorization_code
             scope:
               - account_email
               - profile_nickname
             client-name: Kakao
-            client-authentication-method: POST
+#            client-authentication-method: POST
         provider:
           naver:
             authorization-uri: https://nid.naver.com/oauth2.0/authorize

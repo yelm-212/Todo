@@ -3,7 +3,6 @@ package com.codestates.yelm212.Todo.config.oauth2;
 import com.codestates.yelm212.Todo.config.cookies.CookieAuthorizationRequestRepository;
 import com.codestates.yelm212.Todo.config.cookies.CookieUtils;
 import com.codestates.yelm212.Todo.config.jwt.TokenProvider;
-import com.codestates.yelm212.Todo.config.token.RefreshToken;
 import com.codestates.yelm212.Todo.config.token.TokenDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

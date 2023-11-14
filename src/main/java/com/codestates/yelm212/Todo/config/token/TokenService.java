@@ -46,19 +46,20 @@ public class TokenService {
             String token = getGeneratedToken(member);
             refreshTokenService.addRefreshToken(member.getMemberId(), token); // returns saved RT
             return token;
-        }else{
-            // if token already exists, create new token for this member
-            RefreshToken refreshToken = optionalRefreshToken.get();
-            String newToken = createNewRefreshToken(member);
-//            refreshToken.update(newAccessToken);
-            refreshTokenService.updateRefreshToken(
-                    RefreshToken.builder()
-                            .id(refreshToken.getId())
-                            .refreshToken(newToken)
-                            .memberId(member.getMemberId())
-                            .build());
-            return newToken;
         }
+
+        // if token already exists, create new token for this member
+        RefreshToken refreshToken = optionalRefreshToken.get();
+        String newToken = createNewRefreshToken(member);
+
+        refreshTokenService.updateRefreshToken(
+                RefreshToken.builder()
+                        .id(refreshToken.getId())
+                        .refreshToken(newToken)
+                        .memberId(member.getMemberId())
+                        .build());
+
+        return newToken;
     }
 
     private String getGeneratedToken(Member member) {

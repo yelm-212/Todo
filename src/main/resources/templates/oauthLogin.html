@@ -9,7 +9,11 @@
         .gradient-custom {
             background: #6a11cb;
             background: -webkit-linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
-            background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1))
+            background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
+        }
+
+        .card-body p {
+            white-space: pre;
         }
     </style>
 </head>
@@ -21,10 +25,22 @@
                 <h2 class="text-white">LOGIN</h2>
                 <p class="text-white-50 mt-2 mb-5">서비스 사용을 위해 로그인을 해주세요!</p>
 
-                <div class = "mb-2">
-                    <a href="/oauth2/authorization/google">
-                        <img src="/img/google.png">
-                    </a>
+                <div class="row mb-2">
+                    <div class="col-md-4">
+                        <a href="/oauth2/authorization/google" class="d-block mb-2">
+                            <img src="/img/google.png" class="mx-auto" alt="Google">
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="/oauth2/authorization/naver" class="d-block mb-2">
+                            <img src="/img/naver.png" class="mx-auto" alt="Naver">
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="/oauth2/authorization/kakao" class="d-block mb-2">
+                            <img src="/img/kakao.png" class="mx-auto" alt="Kakao">
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
