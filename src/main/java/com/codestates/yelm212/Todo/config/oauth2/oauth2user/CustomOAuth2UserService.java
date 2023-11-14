@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -41,18 +42,19 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             throw new RuntimeException("Email not found from OAuth2 provider");
         }
 
-        Member member = memberRepository.findByEmail(oAuth2UserInfo.getEmail()).orElse(null);
+        Optional<Member> optionalMember = memberRepository.findByEmail(oAuth2UserInfo.getEmail());
         //이미 가입된 경우
-        if (member != null) {
-            if (!member.getAuthProvider().equals(authProvider)) {
-                throw new RuntimeException("Email already signed up.");
-            }
-            member = updateUser(member, oAuth2UserInfo);
+        if (!optionalMember.get().getAuthProvider().equals(authProvider)) {
+            throw new RuntimeException("Email already signed up.");
         }
+
+        if (optionalMember.isPresent()) {
+            Member member = updateUser(optionalMember.get(), oAuth2UserInfo);
+            return UserPrincipal.create(member, oAuth2UserInfo.getAttributes());
+        }
+
         //가입되지 않은 경우
-        else {
-            member = registerUser(authProvider, oAuth2UserInfo);
-        }
+        Member member = registerUser(authProvider, oAuth2UserInfo);
         return UserPrincipal.create(member, oAuth2UserInfo.getAttributes());
     }
 
