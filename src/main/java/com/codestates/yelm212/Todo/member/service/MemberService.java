@@ -18,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+import static com.codestates.yelm212.Todo.member.entity.Member.builder;
+
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -43,22 +45,24 @@ public class MemberService {
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public Member updateMember(Member member){
-        Member findMember = findVerifiedMember(member.getMemberId());
+        Member.MemberBuilder memberBuilder
+                = builder();
 
-        Optional.ofNullable(member.getName())
-                .ifPresent(name -> findMember.setName(name));
-
-        return memberRepository.save(findMember);
+        return Optional.ofNullable(member)
+                .map(m -> memberBuilder
+                        .name(m.getName())
+                        .todos(m.getTodos())
+                        .password(m.getPassword())
+                        .build())
+                .map(memberRepository::save)
+                .orElseThrow(() -> new LogicalException(ExceptionCode.MEMBER_NOT_FOUND)); // 또는 예외 처리 등으로 처리
     }
 
     @Transactional(readOnly = true)
     public Member findVerifiedMember(long memberId) {
-        Optional<Member> optionalMember =
-                memberRepository.findById(memberId);
-        Member findMember =
-                optionalMember.orElseThrow(() ->
-                        new LogicalException(ExceptionCode.MEMBER_NOT_FOUND));
-        return findMember;
+        return Optional.ofNullable(memberRepository.findById(memberId))
+                .get()
+                .orElseThrow(() -> new LogicalException(ExceptionCode.MEMBER_NOT_FOUND));
     }
 
     public void deleteMember(long memberId) {

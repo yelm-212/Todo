@@ -14,6 +14,7 @@ import javax.persistence.*;
 import java.util.*;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -47,7 +48,6 @@ public class Member implements UserDetails{
         if(todo.getMember() != this) todo.setMember(this);
     }
 
-    @Builder
     public Member(Long memberId, String name, String email, String password) {
         this.memberId = memberId;
         this.name = name;
