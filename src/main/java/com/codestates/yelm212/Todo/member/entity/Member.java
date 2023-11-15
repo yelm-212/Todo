@@ -1,17 +1,18 @@
 package com.codestates.yelm212.Todo.member.entity;
 
 
+import com.codestates.yelm212.Todo.config.oauth2.AuthProvider;
 import com.codestates.yelm212.Todo.config.oauth2.oauth2user.OAuth2UserInfo;
 import com.codestates.yelm212.Todo.todo.entity.TodoEntity;
-import com.codestates.yelm212.Todo.config.oauth2.AuthProvider;
-
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,35 +20,41 @@ import java.util.*;
 @AllArgsConstructor
 @Builder
 @Entity(name = "members")
-public class Member implements UserDetails{
+public class Member implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // post할때 별도 세팅 안해도 알아서 해줌 (식별자)
     private Long memberId;
 
-    @Column(length = 100, nullable = false)
+    @Column(length = 100)
     private String name;
 
-    @Column(nullable = false, updatable = false, unique = true)
+    @Column(unique = true)
     private String email;
 
-    @Column(nullable = false, updatable = true)
     private String password;
-
-    @Column(length = 100, nullable = true)
-    private String oauth2Id;
-
     @OneToMany(mappedBy = "member")
     private List<TodoEntity> todos = new ArrayList<>();
+
+    private String oauth2Id;
 
     @Enumerated(EnumType.STRING)
     private AuthProvider authProvider;
 
     // Todo : needs to be deprecated. Use Builder pattern
+
+    public Member update(OAuth2UserInfo oAuth2UserInfo) {
+        this.name = oAuth2UserInfo.getName();
+        this.oauth2Id = oAuth2UserInfo.getOAuth2Id();
+
+        return this;
+    }
+
     public void setTodos(TodoEntity todo) {
         todos.add(todo);
         if(todo.getMember() != this) todo.setMember(this);
     }
 
+    @Builder
     public Member(Long memberId, String name, String email, String password) {
         this.memberId = memberId;
         this.name = name;
@@ -88,12 +95,5 @@ public class Member implements UserDetails{
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    public Member update(OAuth2UserInfo oAuth2UserInfo) {
-        this.name = oAuth2UserInfo.getName();
-        this.oauth2Id = oAuth2UserInfo.getOAuth2Id();
-        this.email = oAuth2UserInfo.getEmail();
-        return this;
     }
 }

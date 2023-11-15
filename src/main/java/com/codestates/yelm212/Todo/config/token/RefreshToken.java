@@ -10,19 +10,14 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-//@Entity(name = "refreshtoken")
 @RedisHash(value = "refreshToken", timeToLive = 720)
 public class RefreshToken {
 
     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "id", updatable = false)
     private Long id;
 
-//    @Column(name = "member_id", nullable = false, unique = true)
     private Long memberId;
 
-//    @Column(name = "refresh_token", nullable = false)
     @Indexed
     private String refreshToken;
 

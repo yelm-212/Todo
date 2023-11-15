@@ -3,8 +3,13 @@ create table members(
                         name varchar(100) not null,
                         email varchar(256) not null,
                         password varchar(256) not null,
-                        primary key(member_id)
+                        primary key(member_id),
+                        auth_provider varchar(256),
+                        oauth2id varchar(256)
 );
+
+-- ALTER TABLE members ADD auth_provider varchar(256);
+-- ALTER TABLE members ADD oauth2id varchar(256);
 
 create table todos(
                       id bigint not null,

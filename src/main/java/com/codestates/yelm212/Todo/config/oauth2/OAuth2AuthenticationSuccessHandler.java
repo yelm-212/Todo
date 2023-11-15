@@ -22,8 +22,8 @@ import java.util.Optional;
 import static com.codestates.yelm212.Todo.config.cookies.CookieAuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
 
 @Slf4j
-@Component
 @RequiredArgsConstructor
+@Component
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     @Value("${oauth.authorizedRedirectUri}")

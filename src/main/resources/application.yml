@@ -26,7 +26,6 @@ spring:
               - email
               - profile
             redirect-uri: http://localhost:8080/oauth2/callback/google
-          # TODO : Naver, Kakao settings
           naver:
             client-id: ${NAVER_CLI}
             client-secret: ${NAVER_KEY}
@@ -42,7 +41,7 @@ spring:
               - account_email
               - profile_nickname
             client-name: Kakao
-#            client-authentication-method: POST
+            client-authentication-method: POST
         provider:
           naver:
             authorization-uri: https://nid.naver.com/oauth2.0/authorize
@@ -54,6 +53,9 @@ spring:
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
+
+oauth:
+  authorizedRedirectUri: http://localhost:8080/todos
 
 jwt:
   issuer: test@example.com

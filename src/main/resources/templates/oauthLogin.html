@@ -15,6 +15,18 @@
         .card-body p {
             white-space: pre;
         }
+
+        .img-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .img-container img {
+            height: 100px; /* 이미지 세로 길이 설정 */
+            width: auto;
+            margin-bottom: 10px; /* 이미지 사이 간격 */
+        }
     </style>
 </head>
 <body class="gradient-custom">
@@ -27,19 +39,25 @@
 
                 <div class="row mb-2">
                     <div class="col-md-4">
-                        <a href="/oauth2/authorization/google" class="d-block mb-2">
-                            <img src="/img/google.png" class="mx-auto" alt="Google">
-                        </a>
+                        <div class="img-container">
+                            <a href="/oauth2/authorize/google">
+                                <img src="/img/google.png" alt="Google">
+                            </a>
+                        </div>
                     </div>
                     <div class="col-md-4">
-                        <a href="/oauth2/authorization/naver" class="d-block mb-2">
-                            <img src="/img/naver.png" class="mx-auto" alt="Naver">
-                        </a>
+                        <div class="img-container">
+                            <a href="/oauth2/authorize/naver">
+                                <img src="/img/naver.png" alt="Naver">
+                            </a>
+                        </div>
                     </div>
                     <div class="col-md-4">
-                        <a href="/oauth2/authorization/kakao" class="d-block mb-2">
-                            <img src="/img/kakao.png" class="mx-auto" alt="Kakao">
-                        </a>
+                        <div class="img-container">
+                            <a href="/oauth2/authorize/kakao">
+                                <img src="/img/kakao.png" alt="Kakao">
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

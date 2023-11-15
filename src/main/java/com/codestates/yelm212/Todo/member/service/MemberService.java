@@ -18,8 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-import static com.codestates.yelm212.Todo.member.entity.Member.builder;
-
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -27,6 +25,7 @@ public class MemberService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public Member createMember(MemberDto.SignUp requestBody) {
+        validateRequestBody(requestBody);
         verifyExistsEmail(requestBody.getEmail());
 
         return memberRepository.save(
@@ -37,6 +36,15 @@ public class MemberService {
                 .build());
     }
 
+    private void validateRequestBody(MemberDto.SignUp requestBody) {
+        if (requestBody == null ||
+                requestBody.getName() == null || requestBody.getName().isEmpty() ||
+                requestBody.getEmail() == null || requestBody.getEmail().isEmpty() ||
+                requestBody.getPassword() == null || requestBody.getPassword().isEmpty()) {
+            throw new IllegalArgumentException("Name, email, or password cannot be empty");
+        }
+    }
+
     private void verifyExistsEmail(String email) {
         Optional<Member> member = memberRepository.findByEmail(email);
         if (member.isPresent())
@@ -45,8 +53,7 @@ public class MemberService {
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public Member updateMember(Member member){
-        Member.MemberBuilder memberBuilder
-                = builder();
+        Member.MemberBuilder memberBuilder = Member.builder();
 
         return Optional.ofNullable(member)
                 .map(m -> memberBuilder
