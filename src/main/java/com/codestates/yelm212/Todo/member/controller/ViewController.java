@@ -33,9 +33,9 @@ public class ViewController {
         this.tokenService = tokenService;
     }
 
-    @GetMapping("/login")
+    @GetMapping("/members/login")
     public String login() {
-        return "login";
+        return "deflogin.html";
     }
 
     @GetMapping("/oauth2/login")

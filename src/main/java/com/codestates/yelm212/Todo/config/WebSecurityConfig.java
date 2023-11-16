@@ -48,54 +48,51 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .httpBasic().disable()
-                .formLogin().disable()
+                .formLogin()
+                .loginPage("/members/login")
+                .usernameParameter("email") // 아이디 파라미터
+                .passwordParameter("password") // 패스워드 파라미터
+                .defaultSuccessUrl("/todos") // 로그인 성공 후 이동 페이지.
+                .successHandler(
+                        new AuthenticationSuccessHandler() {
+                            @Override
+                            public void onAuthenticationSuccess(
+                                    HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    Authentication authentication) throws IOException, ServletException {
+                                System.out.println("authentication : " + authentication.getName());
+                                response.sendRedirect("/todos"); // 인증 성공한 후 이동
+                            }
+                        }
+                )
+                .failureHandler(
+                        new AuthenticationFailureHandler() {
+                    @Override
+                    public void onAuthenticationFailure(
+                            HttpServletRequest request,
+                            HttpServletResponse response,
+                            AuthenticationException exception) throws IOException, ServletException {
+                        System.out.println("exception : " + exception.getMessage());
+                        response.sendRedirect("/login"); // 실패시 로그인 페이지로 되돌아감
+                    }
+                })
+                .permitAll()
+                .and()
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login")
+                .invalidateHttpSession(true)
+                .and()
                 .csrf().disable()
                 .rememberMe().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http
-                .authorizeHttpRequests()
-                .antMatchers("/favicon.ico","/login", "/signup", "/api/**", "/oauth2/**").permitAll()
+                .authorizeRequests()
+                .antMatchers("/favicon.ico",
+                        "/members/login", "/signup",
+                        "/api/**", "/oauth2/**").permitAll()
                 .anyRequest().authenticated();
-
-//                .and()
-//                .formLogin()
-//                .loginPage("/login")
-//                .usernameParameter("email") // 아이디 파라미터
-//                .passwordParameter("password") // 패스워드 파라미터
-//                .defaultSuccessUrl("/todos") // 로그인 성공 후 이동 페이지.
-//                .successHandler(
-//                        new AuthenticationSuccessHandler() {
-//                            @Override
-//                            public void onAuthenticationSuccess(
-//                                    HttpServletRequest request,
-//                                    HttpServletResponse response,
-//                                    Authentication authentication) throws IOException, ServletException {
-//                                System.out.println("authentication : " + authentication.getName());
-//                                response.sendRedirect("/todos"); // 인증 성공한 후 이동
-//                            }
-//                        }
-//                )
-//                .failureHandler(
-//                        new AuthenticationFailureHandler() {
-//                    @Override
-//                    public void onAuthenticationFailure(
-//                            HttpServletRequest request,
-//                            HttpServletResponse response,
-//                            AuthenticationException exception) throws IOException, ServletException {
-//                        System.out.println("exception : " + exception.getMessage());
-//                        response.sendRedirect("/login"); // 실패시 로그인 페이지로 되돌아감
-//                    }
-//                })
-//                .permitAll()
-//                .and()
-//                .logout()
-//                .logoutUrl("/logout")
-//                .logoutSuccessUrl("/login")
-//                .invalidateHttpSession(true)
-//
-//                .and()
-//                .csrf().disable();
 
         http.oauth2Login()
                 .authorizationEndpoint()
